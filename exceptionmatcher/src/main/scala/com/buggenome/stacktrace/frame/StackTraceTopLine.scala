@@ -81,4 +81,20 @@ class StackTraceTopLine(val chained : Boolean, declaringClass : String, val mess
  * Regex for the stack trace top line
  * It has the format: ( [MODIFIER]? [EXCEPTION] ) ( [:] [MESSAGE] )?
  */
-object StackTraceTopLine extends Regex(regex = """^(Caused by:)?\s?([\w$.]+)(:\s[^\r]*)?""")
+//object StackTraceTopLine extends Regex(regex = """^(Caused by:)?\s?([\w$.]+)(:\s[^\r]*)?""")
+
+object StackTraceTopLine {
+
+    //Regex for the stack trace top line
+    // It has the format: ( [MODIFIER]? [EXCEPTION] ) ( [:] [MESSAGE] )?
+    private val TopLineRE = """^(Caused by:)?\s?([\w$.]+)(:\s[^\r]*)?""".r
+
+    def unapply(topLine : Any) : Option[(Boolean, String, Option[String])] = {
+        topLine match {
+            case TopLineRE(chained, declaringClass, message) =>
+                Some((chained != null, declaringClass, if (message != null) new Some(message.drop(2)) else None)) //the drop(2) called from message removes the ': ' characteres left by the regex
+            case _ =>
+                None
+        }
+    }
+}

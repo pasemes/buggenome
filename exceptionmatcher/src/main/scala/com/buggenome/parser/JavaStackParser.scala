@@ -51,16 +51,14 @@ class JavaStackParser extends Logging {
 
                 case StackTraceTopLine(chained, exception, message) =>
                     logger debug "Identified a stack top line: " + slimmedStackLine
-                    val isChained = chained != null
                     val lineIndex = stackToProcess.indexOf(stackLine)
-
                     if(lineIndex == 0) {//if index is 0, then we are beginning to process the stack, and so we add the line to the current stack
-                        stackTrace.addFrame(new StackTraceTopLine(isChained, exception, if (message != null) new Some(message.drop(2)) else None)) //the drop(2) called from message removes the ': ' characteres left by the regex //TODO colocar este if da message dentro do unapply
-                        if(isChained) {//as we are beginning to process a chained stack (index = 0 and chained = true), we have to link it with the previous stack (chainedStack)
+                        stackTrace.addFrame(new StackTraceTopLine(chained, exception, message))
+                        if(chained) {//as we are beginning to process a chained stack (index = 0 and chained = true), we have to link it with the previous stack (chainedStack)
                             stackTrace.causedBy(chainedStack)
                             chainedStack.resultedIn(stackTrace)
                         }
-                    } else if(isChained) { //if the index is not zero, then we have to process a new stack trace which is the exception source
+                    } else if(chained) { //if the index is not zero, then we have to process a new stack trace which is the exception source
                         parse(stackToProcess.drop(lineIndex), stackTrace) //the drop method eliminates the already processed lines from the stack
                         return stackTrace
                     } else {//we have a problem if the index is not 0 and the line is not chained, see the exception message for details
