@@ -2,7 +2,7 @@ import sbt._
 
 class BugGenomeProject(info: ProjectInfo) extends ParentProject(info) with IdeaProject {
 
-   lazy val exceptionmatcher = project("exceptionmatcher", "Exception Matcher (CORE)", new ExceptionMatcherProject(_))
+   lazy val exceptionmatcher = project("exceptionmatcher", "Core", new ExceptionMatcherProject(_))
    class ExceptionMatcherProject(info: ProjectInfo) extends DefaultProject(info) with IdeaProject {
        val specs = "org.scala-tools.testing" % "specs_2.8.1" % "1.6.7" % "test" withSources
        val logback = "ch.qos.logback" % "logback-classic" % "0.9.27"
