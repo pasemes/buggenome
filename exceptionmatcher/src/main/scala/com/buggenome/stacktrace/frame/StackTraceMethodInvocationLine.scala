@@ -87,17 +87,6 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
                     case None => "(Unknown Source)"
                 }
             }
-
-
-
-
-//            if(fileName != null && lineNumber >= 0) {
-//                "(" + fileName + "." + language + ":" + lineNumber + ")"
-//            } else if(fileName != null) {
-//                "("+fileName + "." + language + ")"
-//            } else {
-//                "(Unknown Source)"
-//            }
         }
     }
 
@@ -155,14 +144,13 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
  */
 object StackTraceMethodInvocationLine {
 
+    //Regex for the stack trace lines (except for the top line)
+    //It has the format: ( [at] [METHOD] [(] [FILE] [:] [LINE] [)] )*
+    private val MethodInvocationLineRE = """at\s([\w$.]+)\.([\w<>$]+)\((Unknown\sSource|Native\sMethod|([\w$]+)\.(scala|java|groovy):([\d]+))\)""".r
     val NATIVE_METHOD_LINE = -2
     val UNKNOWN_SOURCE_LINE = -1
 
     def unapply(methodInvocationLine : Any) : Option[(String,String,Option[String],Option[String],Int)]  = { //options contentent corresponds to clazz, method, file, language, line
-
-        //Regex for the stack trace lines (except for the top line)
-        //It has the format: ( [at] [METHOD] [(] [FILE] [:] [LINE] [)] )*
-        val MethodInvocationLineRE = """at\s([\w$.]+)\.([\w<>$]+)\((Unknown\sSource|Native\sMethod|([\w$]+)\.(scala|java|groovy):([\d]+))\)""".r
 
         methodInvocationLine match {
             case MethodInvocationLineRE(clazz, method, parenthesesContent, file, language, line) if parenthesesContent == "Native Method" =>

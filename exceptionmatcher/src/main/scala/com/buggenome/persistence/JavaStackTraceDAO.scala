@@ -11,11 +11,21 @@ import com.buggenome.stacktrace.frame.{StackTraceFramesInCommon, StackTraceMetho
   */
 object JavaStackTraceDAO {
 
-    //database fields for the JavaStackTrace collection. the structure is sketched below: //TODO complementar este comentario
-    // + document_root
-    //      |- FIELD_STACKTRACE_COMMON_FRAMES
-    //      |- FIELD_STACKTRACE_METHOD_INVOCATION_LINES
-    //
+    //database fields for the JavaStackTrace collection. the structure is sketched below:
+    //{ "chained"                 : boolean,
+    //  "exception_class"         : string,
+    //  "message"                 : string,
+    //  "method_invocation_lines" : array<embedded_document>
+    //      [{ "class"      : string,
+	//	       "method"     : string,
+	//	       "file"       : string,
+	//	       "language"   : string,
+	//	       "line"       : integer }]
+    //  "resulted_in_stack" : embedded_document
+    //      { "chained" : boolean,
+    //      ...
+    //      }
+    //}
     private val FIELD_STACKTRACE_COMMON_FRAMES            =   "common_frames"
     private val FIELD_STACKTRACE_METHOD_INVOCATION_LINES  =   "method_invocation_lines"
     private val FIELD_STACKTRACE_RESULTED_IN_STACK        =   "resulted_in_stack"
@@ -37,7 +47,6 @@ object JavaStackTraceDAO {
     def insert(stackTrace : StackTrace) {
         mongoColl.insert(buildDocument(stackTrace))
     }
-
 
     /**
      *  Search for StackTraces which have the top line passed as parameter.
@@ -89,8 +98,8 @@ object JavaStackTraceDAO {
 
                 invocationLineBuilder += FIELD_METHODLINE_CLASS         ->  invocationLine.declaringClass
                 invocationLineBuilder += FIELD_METHODLINE_METHOD        ->  invocationLine.methodName
-                invocationLineBuilder += FIELD_METHODLINE_FILE          ->  invocationLine.fileName//.getOrElse(null)
-                invocationLineBuilder += FIELD_METHODLINE_LANGUAGE      ->  invocationLine.language//.getOrElse(null)
+                invocationLineBuilder += FIELD_METHODLINE_FILE          ->  invocationLine.fileName
+                invocationLineBuilder += FIELD_METHODLINE_LANGUAGE      ->  invocationLine.language
                 invocationLineBuilder += FIELD_METHODLINE_LINENUMBER    ->  invocationLine.lineNumber
 
                 invocationLineListBuilder += invocationLineBuilder.result
