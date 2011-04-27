@@ -14,7 +14,7 @@ class JavaStackParserSpec extends Specification {
 
     "A java stack trace parser" should {
 
-        "Detect the stack lines in a simple (not chained) stack trace" in {
+        "Be able to parse simple (not chained) stack traces" in {
 
             //example taken from
             //http://www.developer.com/java/data/article.php/1464821/Processing-Stack-Trace-Data-in-Java.htm
@@ -70,10 +70,20 @@ class JavaStackParserSpec extends Specification {
             stackLines(3) must beEqualTo(stackTrace.getLine(14).toString)
         }
 
-        "testar unknown source|native" in { //TODO testar
+        "Be able to parse stack traces with unknown source or native lines" in { //TODO testar
 
-//            stackLines(2) = "at TestDebug.main(Unknown Source)"
-//            stackLines(3) = "at java.lang.System.arraycopy(Native Method)"
+            val stackLines = new Array[String](4)
+            stackLines(0)  = "NewEx01: Thrown from meth02"
+            stackLines(1)  = "at Class01.meth02(StackTr01.java:92)"
+            stackLines(2)  = "at TestDebug.main(Unknown Source)"
+            stackLines(3)  = "at java.lang.System.arraycopy(Native Method)"
+
+            val stackTrace : StackTrace = new JavaStackParser().parse(stackLines)
+
+            stackTrace.sizeAllLines must beEqualTo(4)
+
+            for(i <- 0 to 3)
+                stackLines(i) must beEqualTo(stackTrace.getLine(i).toString)
         }
     }
 }

@@ -156,7 +156,7 @@ object StackTraceMethodInvocationLine {
             case MethodInvocationLineRE(clazz, method, parenthesesContent, file, language, line) if parenthesesContent == "Native Method" =>
                 Some((clazz, method, None, None, NATIVE_METHOD_LINE))
             case MethodInvocationLineRE(clazz, method, parenthesesContent, file, language, line) if parenthesesContent == "Unknown Source" =>
-                Some((clazz, method, None, None, NATIVE_METHOD_LINE))
+                Some((clazz, method, None, None, UNKNOWN_SOURCE_LINE))
             case MethodInvocationLineRE(clazz, method, parenthesesContent, file, language, line) =>
                 Some((clazz, method, new Some(file), new Some(language), line.toInt))
             case _ =>
