@@ -48,11 +48,19 @@ class JavaStackTraceDAOSpec extends Specification {
             //retrieving it again from the database for asserting some properties
             val dbResult = JavaStackTraceDAO.findByStackTopLine(stackTrace.getTopLine, 0)
 
-            dbResult.size must be(1)
 
-            //val stackTraceFromDB = dbResult.next()
+            println("RESULTADO " + dbResult.toString)
+            dbResult.hasNext must be(true)
+            println("RESULTADO " + dbResult.toString)
+            val stackTraceFromDB = dbResult.next
+            println("RESULTADO " + dbResult.toString)
+            //TODO testar este apenas quando o teste equals da classe StackTrace estiver pronto
+            stackTraceFromDB must beEqualTo(stackTrace)
 
-            //stackTraceFromDB must beEqualTo(stackTrace)
+
+
+
+
 
         }
 

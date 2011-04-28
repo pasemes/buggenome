@@ -148,7 +148,7 @@ class StackTrace {
      */
     override def toString : String = {
         //TODO implementar essa bagaca
-        ""
+        "implementar " + getAllLines.size
     }
 
     /**

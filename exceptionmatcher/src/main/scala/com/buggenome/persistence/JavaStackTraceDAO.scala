@@ -140,7 +140,7 @@ object JavaStackTraceDAO {
 
         stackTrace.causedBy(causedByStack)
         stackTraceDBObject.getAs[Int](FIELD_STACKTRACE_COMMON_FRAMES).foreach( framesInCommon => {
-            // a bit ugly, but since all lines are persisted in database (even the common ones, to facilitate queries) we have to remove the commons
+            // a bit ugly, but since all lines are persisted in database (even the common ones, to facilitate queries) we have to remove the commons ones
             stackTrace.removeLastLines(framesInCommon)
             // and add them in the "right way" from the StackTrace class perspective
             stackTrace.addFrame(new StackTraceFramesInCommon(framesInCommon, causedByStack))

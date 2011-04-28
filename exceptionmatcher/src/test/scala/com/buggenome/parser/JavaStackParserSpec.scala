@@ -70,7 +70,7 @@ class JavaStackParserSpec extends Specification {
             stackLines(3) must beEqualTo(stackTrace.getLine(14).toString)
         }
 
-        "Be able to parse stack traces with unknown source or native lines" in { //TODO testar
+        "Be able to parse stack traces with unknown source or native lines" in {
 
             val stackLines = new Array[String](4)
             stackLines(0)  = "NewEx01: Thrown from meth02"
