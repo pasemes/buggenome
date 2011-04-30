@@ -16,7 +16,7 @@ class StackTraceTopLineSpec extends Specification {
             val stackLine : String = "Caused by: NewEx02: Thrown from meth03"
             stackLine must beLike {//the boolean values inside cases are captured by the "must beLike" Steps matcher
                 case StackTraceTopLine(chained, exception, message) =>
-                    chained         must notBeNull //the value isn't important in this case - the StackTraceTopLine constructor expects only a boolean for this argument
+                    chained         must be(true) //the value isn't important in this case - the StackTraceTopLine constructor expects only a boolean for this argument
                     exception       must beEqualTo("NewEx02")
                     message.get     must beEqualTo("Thrown from meth03")
                     true
@@ -35,25 +35,31 @@ class StackTraceTopLineSpec extends Specification {
             }
         }
 
-        "be equal to another when they have same content and different otherwise" in {
-
-            val stackLine1String = "Caused by: NewEx02: Thrown from meth03"
-            var stackLine2String = "Caused by: NewEx02: Thrown from meth03"
-
-            val stackLine1 = stackLine1String match { case StackTraceTopLine(chained, exception, message) => new StackTraceTopLine(chained, exception, message)}
-            var stackLine2 = stackLine2String match { case StackTraceTopLine(chained, exception, message) => new StackTraceTopLine(chained, exception, message)}
-
+        "Be equal to another when they have same content" in {
+            val stackLine1 = new StackTraceTopLine(true, "NewEx02", Some("Thrown from meth03"))
+            val stackLine2 = new StackTraceTopLine(true, "NewEx02", Some("Thrown from meth03"))
             stackLine1 must beEqualTo(stackLine2)
+        }
 
-            stackLine2String  = "NewEx02: Thrown from meth03"
-            stackLine2 = stackLine2String match { case StackTraceTopLine(chained, exception, message) => new StackTraceTopLine(chained, exception, message)}
-
+        "Be different to another when they have different content" in {
+            val stackLine1 = new StackTraceTopLine(true, "NewEx02", Some("Thrown from meth03"))
+            var stackLine2 = new StackTraceTopLine(false, "NewEx02", Some("Thrown from meth03"))
             stackLine1 must beDifferentFrom(stackLine2)
 
-            stackLine2String  = "Caused by: NewEx02"
-            stackLine2 = stackLine2String match { case StackTraceTopLine(chained, exception, message) => new StackTraceTopLine(chained, exception, message)}
-
+            stackLine2 = new StackTraceTopLine(true, "NewEx03", Some("Thrown from meth03"))
             stackLine1 must beDifferentFrom(stackLine2)
+
+            stackLine2 = new StackTraceTopLine(true, "NewEx02", Some("Thrown from meth04"))
+            stackLine1 must beDifferentFrom(stackLine2)
+
+            stackLine2 = new StackTraceTopLine(true, "NewEx02", None)
+            stackLine1 must beDifferentFrom(stackLine2)
+        }
+
+        "Represent itself in string format resembling the original format thrown by the JVM" in {
+            "Caused by: com.NewEx02: Thrown from meth03" must beEqualTo(new StackTraceTopLine(true, "com.NewEx02", Some("Thrown from meth03")).toString)
+            "com.NewEx02: Thrown from meth03" must beEqualTo(new StackTraceTopLine(false, "com.NewEx02", Some("Thrown from meth03")).toString)
+            "com.NewEx02" must beEqualTo(new StackTraceTopLine(false, "com.NewEx02", None).toString)
         }
     }
 }

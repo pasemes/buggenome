@@ -2,6 +2,7 @@ package com.buggenome.stacktrace
 
 import frame.{StackTraceMethodInvocationLine, StackTraceTopLine, StackTraceFramesInCommon}
 import org.specs.Specification
+import com.buggenome.parser.JavaStackParser
 
 /*
 * Created by IntelliJ IDEA.
@@ -125,6 +126,64 @@ class StackTraceSpec extends Specification {
             stackTrace.addFrame(new StackTraceMethodInvocationLine("com.FooClass", "fooMethod", new Some("FooFile"), new Some("java"), 18)) must throwAn[IllegalArgumentException]
 
             stackTrace.getLine(1) must throwAn[IndexOutOfBoundsException]
+        }
+
+        "Be equal to another when they have same content" in {
+            val stackLines = new Array[String](12)
+
+            stackLines(0)  = "NewEx01: Thrown from meth02"
+            stackLines(1)  = "at Class01.meth02(StackTr01.java:92)"
+            stackLines(2)  = "at Class01.meth01(Unknown Source)"
+            stackLines(3)  = "at StackTr01.main(Native Method)"
+            stackLines(4)  = "Caused by: NewEx02: Thrown from meth03"
+            stackLines(5)  = "at Class01.meth03(StackTr01.java:102)"
+            stackLines(6)  = "at Class01.meth02(StackTr01.java:85)"
+            stackLines(7)  = "... 2 more"
+            stackLines(8)  = "Caused by: NewEx03: Thrown from meth04"
+            stackLines(9)  = "at Class01.meth04(StackTr01.java:112)"
+            stackLines(10) = "at Class01.meth03(StackTr01.java:100)"
+            stackLines(11) = "... 3 more"
+
+            val stackTrace1 = new JavaStackParser().parse(stackLines)
+            val stackTrace2 = new JavaStackParser().parse(stackLines)
+
+            stackTrace1 must beEqualTo(stackTrace2)
+        }
+
+        "Be different to another when they have different content" in {
+
+            var stackLines = new Array[String](12)
+            stackLines(0)  = "NewEx01: Thrown from meth02"
+            stackLines(1)  = "at Class01.meth02(StackTr01.java:92)"
+            stackLines(2)  = "at Class01.meth01(Unknown Source)"
+            stackLines(3)  = "at StackTr01.main(Native Method)"
+            stackLines(4)  = "Caused by: NewEx02: Thrown from meth03"
+            stackLines(5)  = "at Class01.meth03(StackTr01.java:102)"
+            stackLines(6)  = "at Class01.meth02(StackTr01.java:85)"
+            stackLines(7)  = "... 2 more"
+            stackLines(8)  = "Caused by: NewEx03: Thrown from meth04"
+            stackLines(9)  = "at Class01.meth04(StackTr01.java:112)"
+            stackLines(10) = "at Class01.meth03(StackTr01.java:100)"
+            stackLines(11) = "... 3 more"
+            val stackTrace1 = new JavaStackParser().parse(stackLines)
+
+
+            stackLines = new Array[String](12)
+            stackLines(0)  = "NewEx01: Thrown from meth02"
+            stackLines(1)  = "at Class01.meth02(StackTr01.java:92)"
+            stackLines(2)  = "at Class01.meth01(StackTr01.java:60)"
+            stackLines(3)  = "at StackTr01.main(StackTr01.java:52)"
+            stackLines(4)  = "Caused by: NewEx02: Thrown from meth03"
+            stackLines(5)  = "at Class01.meth03(StackTr01.java:102)"
+            stackLines(6)  = "at Class01.meth02(StackTr01.java:85)"
+            stackLines(7)  = "... 2 more"
+            stackLines(8)  = "Caused by: NewEx03: Thrown from meth04"
+            stackLines(9)  = "at Class01.meth04(StackTr01.java:112)"
+            stackLines(10) = "at Class01.meth03(StackTr01.java:100)"
+            stackLines(11) = "... 3 more"
+            val stackTrace2 = new JavaStackParser().parse(stackLines)
+
+            stackTrace1 must beDifferentFrom(stackTrace2)
         }
     }
 }

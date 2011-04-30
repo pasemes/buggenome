@@ -83,7 +83,7 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
             } else {
                 fileName match {
                     case Some(fn) if lineNumber >= 0 => "(" + fn + "." + language.get + ":" + lineNumber + ")"
-                    case Some(fn) => "("+ fn + "." + language + ")"
+                    case Some(fn) => "("+ fn + "." + language.get + ")"
                     case None => "(Unknown Source)"
                 }
             }
@@ -108,7 +108,7 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
      *         <tt>StackTraceMethodInvocationLine</tt> instance representing the same
      *         method invocation line as this instance.
      */
-    override def equals(obj : Any) : Boolean = { //TODO testar equals
+    override def equals(obj : Any) : Boolean = {
         if(this eq obj.asInstanceOf[AnyRef]) return true
         if(!obj.isInstanceOf[StackTraceMethodInvocationLine]) return false
 
@@ -121,7 +121,6 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
                this.lineNumber      == methodInvocationLine.lineNumber
     }
 
-
     /**
      * Returns a hash code value for this method invocation line.
      */
@@ -130,14 +129,6 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
                 31*language.hashCode + 31*lineNumber.hashCode
     }
 }
-
-/**
- * Regex for the stack trace lines (except for the top line)
- * It has the format: ( [at] [METHOD] [(] [FILE] [:] [LINE] [)] )*
- */
-//object StackTraceMethodInvocationLine extends Regex(regex = """at\s([\w$.]+)\.([\w<>$]+)\(([\w$]+)\.(scala|java|groovy):([\d]+)\)""")
-// object StackTraceMethodInvocationLine extends Regex(regex = """at\s([\w$.]+)\.([\w<>$]+)\((Unknown\sSource|Native\sMethod|([\w$]+)\.(scala|java|groovy):([\d]+))\)""")
-
 
 /**
  * Companion object.

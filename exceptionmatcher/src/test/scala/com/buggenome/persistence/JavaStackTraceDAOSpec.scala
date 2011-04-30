@@ -28,8 +28,8 @@ class JavaStackTraceDAOSpec extends Specification {
             val stackLines = new Array[String](12)
             stackLines(0)  = "NewEx01: Thrown from meth02"
             stackLines(1)  = "at Class01.meth02(StackTr01.java:92)"
-            stackLines(2)  = "at Class01.meth01(StackTr01.java:60)"
-            stackLines(3)  = "at StackTr01.main(StackTr01.java:52)"
+            stackLines(2)  = "at Class01.meth01(Unknown Source)"
+            stackLines(3)  = "at StackTr01.main(Native Method)"
             stackLines(4)  = "Caused by: NewEx02: Thrown from meth03"
             stackLines(5)  = "at Class01.meth03(StackTr01.java:102)"
             stackLines(6)  = "at Class01.meth02(StackTr01.java:85)"
@@ -47,27 +47,9 @@ class JavaStackTraceDAOSpec extends Specification {
 
             //retrieving it again from the database for asserting some properties
             val dbResult = JavaStackTraceDAO.findByStackTopLine(stackTrace.getTopLine, 0)
-
-
-            println("RESULTADO " + dbResult.toString)
-            dbResult.hasNext must be(true)
-            println("RESULTADO " + dbResult.toString)
             val stackTraceFromDB = dbResult.next
-            println("RESULTADO " + dbResult.toString)
-            //TODO testar este apenas quando o teste equals da classe StackTrace estiver pronto
+
             stackTraceFromDB must beEqualTo(stackTrace)
-
-
-
-
-
-
         }
-
-//         "testar unknown source|native" in { //TODO testar
-//
-////            stackLines(2) = "at TestDebug.main(Unknown Source)"
-////            stackLines(3) = "at java.lang.System.arraycopy(Native Method)"
-//        }
     }
 }

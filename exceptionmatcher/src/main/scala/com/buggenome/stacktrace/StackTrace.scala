@@ -147,14 +147,19 @@ class StackTrace {
      * Returns a string representation of this stack trace.
      */
     override def toString : String = {
-        //TODO implementar essa bagaca
-        "implementar " + getAllLines.size
+        var stackTraceString : String = ""
+        for(i <- 0 to this.sizeNotChained - getNumberOfCommonFrames - 1) {
+            stackTraceString += getLine(i).toString +"\n"
+        }
+        if(hasFramesInCommon) stackTraceString += framesInCommon.toString + "\n"
+        stackTraceString += getResultingStack.getOrElse("").toString
+        stackTraceString
     }
 
     /**
      * Two StackTraces are equals when they have the same size and its lines are equals.
      */
-    override def equals(obj : Any) : Boolean = {  //TODO testar equals
+    override def equals(obj : Any) : Boolean = {
         if(this eq obj.asInstanceOf[AnyRef]) return true
 
         if(!obj.isInstanceOf[StackTrace]) return false
@@ -163,7 +168,7 @@ class StackTrace {
 
         if(this.sizeAllLines != stackTrace.sizeAllLines) return false
 
-        for(i <- 0 to this.sizeAllLines) {
+        for(i <- 0 to this.sizeAllLines - 1) {
             if(this.getLine(i) != (stackTrace.getLine(i))) return false
         }
         return true

@@ -39,7 +39,11 @@ class StackTraceTopLine(val chained : Boolean, declaringClass : String, val mess
      */
     override def toString() : String = {
         return (if(chained) "Caused by: " else "") +
-                declaringClass + ": " + message.getOrElse(null)
+                declaringClass +
+                (message match {
+                        case Some(msg) => ": " + msg
+                        case None => ""
+                })
     }
 
     /**
@@ -58,7 +62,7 @@ class StackTraceTopLine(val chained : Boolean, declaringClass : String, val mess
      *         <tt>StackTraceTopLine</tt> instance representing the same
      *         top line as this instance.
      */
-    override def equals(obj : Any) : Boolean = {  //TODO testar equals
+    override def equals(obj : Any) : Boolean = {
         if(this eq obj.asInstanceOf[AnyRef]) return true
         if(!obj.isInstanceOf[StackTraceTopLine]) return false
 
@@ -76,12 +80,6 @@ class StackTraceTopLine(val chained : Boolean, declaringClass : String, val mess
         31*declaringClass.hashCode + 31*chained.hashCode + 31*message.hashCode
     }
 }
-
-/**
- * Regex for the stack trace top line
- * It has the format: ( [MODIFIER]? [EXCEPTION] ) ( [:] [MESSAGE] )?
- */
-//object StackTraceTopLine extends Regex(regex = """^(Caused by:)?\s?([\w$.]+)(:\s[^\r]*)?""")
 
 object StackTraceTopLine {
 
