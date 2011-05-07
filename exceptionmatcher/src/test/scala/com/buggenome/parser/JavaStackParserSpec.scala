@@ -2,7 +2,6 @@ package com.buggenome.parser
 
 import org.specs._
 import com.buggenome.stacktrace.StackTrace
-import scala.util.matching.Regex._
 
 /**
  *
