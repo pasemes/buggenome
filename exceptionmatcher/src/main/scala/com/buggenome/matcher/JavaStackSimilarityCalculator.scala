@@ -11,15 +11,11 @@ import com.buggenome.stacktrace.StackTrace
 
 abstract class JavaStackSimilarityCalculator {
 
-
-
-
     /**
      * Compute the similarity between two stacks is based on the number of common lines.
-     * @return a positive number representing the number of similar lines when the parsing is done using a top-down approach<br>
-     *         a negative number representing the number of different lines when the parsing is done using a bottom-up approach
+     * @return an double value from 0 to 1, indicating the similarity
      */
-    def computeSimilarity(stackTrace : StackTrace, otherStackTrace : StackTrace) : Int
+    def computeSimilarity(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double
 
 
 
