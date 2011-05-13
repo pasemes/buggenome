@@ -5,3 +5,6 @@ project/boot/
 project/plugins/project
 .idea
 \.idea/workspace.xml
+*.iml
+*.ipr
+*.iws
