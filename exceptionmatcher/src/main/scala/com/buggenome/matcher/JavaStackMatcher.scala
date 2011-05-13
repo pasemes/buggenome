@@ -2,11 +2,13 @@ package com.buggenome.matcher
 
 import com.buggenome.stacktrace.StackTrace
 import collection.mutable.ListBuffer
-import util.Sorting
 import scala.Array
 
 /**
- * Created by IntelliJ IDEA.
+ * Responsible for matching a stack trace against a set of stacks.
+ * @param dependencies must contain an instantiated array with JavaStackSimilarityCalculators to be used by the matcher.<br/>
+ *          The order of the calculators determine the order of the matching results. The first N matches will be<br/>
+ *          based on the first calculator, the second M matches based on the second and so on ...
  * User: pasemes
  * Date: 07/05/11
  * Time: 20:04
