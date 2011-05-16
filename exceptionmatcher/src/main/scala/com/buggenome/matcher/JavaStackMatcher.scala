@@ -3,6 +3,8 @@ package com.buggenome.matcher
 import com.buggenome.stacktrace.StackTrace
 import collection.mutable.ListBuffer
 import scala.Array
+import similaritycalculators._
+import collection.immutable.ListSet
 
 /**
  * Responsible for matching a stack trace against a set of stacks.
@@ -15,14 +17,16 @@ import scala.Array
  */
 class JavaStackMatcher(val dependencies : { val similarityCalculators : Array[JavaStackSimilarityCalculator] } ) {
 
-    def computeSimilarStacks(stackTrace : StackTrace, stackTraces : List[StackTrace]) : List[StackTrace] = {
+    def computeSimilarStacks(stackTrace : StackTrace, stackTracesSet : ListSet[StackTrace]) : List[StackTrace] = {
+        var stackTracesList = stackTracesSet.toList
         val orderedSimilarStacks = new ListBuffer[StackTrace]()
         dependencies.similarityCalculators.foreach{ similarityCalculator =>
-            val mappedSimilarity = stackTraces.map{ //maps to a tuple (stackTrace, similarityValue)
+            val mappedSimilarity = stackTracesList.map{ //maps to a tuple (stackTrace, similarityValue)
                     similarStack => (similarStack, similarityCalculator.computeSimilarity(stackTrace, similarStack))}
             val orderedMappedSimilarity = mappedSimilarity.sortWith{ //sorts the stacks based on the similarityValue
                     (stackSimilarityTuple1, stackSimilarityTuple2) => stackSimilarityTuple1._2 < stackSimilarityTuple2._2}
-            orderedSimilarStacks ++= orderedMappedSimilarity.filter(_._2 != 0).map(_._1) //removes the stacks which don't have any degree of similarity and maps it back to a list of stacks
+            orderedSimilarStacks ++= orderedMappedSimilarity.filter(_._2 != 0).map(_._1) //removes the stacks which don't have any degree of similarity, mapping it back to a list of stacks
+            stackTracesList = orderedMappedSimilarity.filter(_._2 == 0).map(_._1) //keeps only the stacks which don't have any degree of similarity to be processed by the next calculator
         }
         orderedSimilarStacks.toList
     }
@@ -35,10 +39,10 @@ class JavaStackMatcher(val dependencies : { val similarityCalculators : Array[Ja
 object JavaStackMatcherPrecisionConfig {
     lazy val similarityCalculators : Array[JavaStackSimilarityCalculator] = {
         val calculators = new Array[JavaStackSimilarityCalculator](4)
-        calculators(0) = new JavaStackCompleteMatchSimilarityCalculator
-        calculators(1) = new JavaStackChainedSimilarityCalculator
-        calculators(2) = new JavaStackTopDownSimilarityCalculator
-        calculators(3) = new JavaStackBottomUpSimilarityCalculator
+        calculators(0) = new JavaStackCompleteMatchSimilarityCalculator with JavaStackSimilarityCalculationMethodWeights
+        calculators(1) = new JavaStackChainedSimilarityCalculator with JavaStackSimilarityCalculationMethodWeights
+        calculators(2) = new JavaStackTopDownSimilarityCalculator with JavaStackSimilarityCalculationMethodWeights
+        calculators(3) = new JavaStackBottomUpSimilarityCalculator with JavaStackSimilarityCalculationMethodWeights
         calculators
     }
     lazy val javaStackMatcher : JavaStackMatcher = new JavaStackMatcher(this)
