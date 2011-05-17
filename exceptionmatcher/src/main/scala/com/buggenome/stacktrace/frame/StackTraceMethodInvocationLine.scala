@@ -114,11 +114,18 @@ class StackTraceMethodInvocationLine(declaringClass : String, val methodName : S
 
         val methodInvocationLine = obj.asInstanceOf[StackTraceMethodInvocationLine]
 
-        return this.declaringClass  == methodInvocationLine.declaringClass &&
-               this.methodName      == methodInvocationLine.methodName &&
-               this.fileName        == methodInvocationLine.fileName &&
-               this.language        == methodInvocationLine.language &&
+        return equalIgnoringLineNumber(methodInvocationLine) &&
                this.lineNumber      == methodInvocationLine.lineNumber
+    }
+
+    /**
+     * Compares two stack trace lines (same as equals method), but ignores the invocation line number on comparison.
+     */
+    def equalIgnoringLineNumber(otherLine: StackTraceMethodInvocationLine) : Boolean = {
+         return this.declaringClass  == otherLine.declaringClass &&
+                this.methodName      == otherLine.methodName &&
+                this.fileName        == otherLine.fileName &&
+                this.language        == otherLine.language
     }
 
     /**

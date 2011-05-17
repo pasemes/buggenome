@@ -17,6 +17,11 @@ import collection.immutable.ListSet
  */
 class JavaStackMatcher(val dependencies : { val similarityCalculators : Array[JavaStackSimilarityCalculator] } ) {
 
+    /**
+     * Computes similar stacks to one stack from a set of stacks.
+     * @param stackTrace the stack which will serve as a model to compare to the stacks in the set
+     * @param stackTracesSet a set of stacks from which similar stacks will be identified
+     */
     def computeSimilarStacks(stackTrace : StackTrace, stackTracesSet : ListSet[StackTrace]) : List[StackTrace] = {
         var stackTracesList = stackTracesSet.toList
         val orderedSimilarStacks = new ListBuffer[StackTrace]()

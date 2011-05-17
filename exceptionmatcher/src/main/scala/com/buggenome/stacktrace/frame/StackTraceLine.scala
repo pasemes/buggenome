@@ -9,6 +9,4 @@ abstract class StackTraceLine(val declaringClass : String) extends StackTraceFra
 
     require(declaringClass != null, "Declaring class cannot be null")
 
-    def equalIgnoringLine(otherLine: StackTraceLine) : Boolean
-
 }
