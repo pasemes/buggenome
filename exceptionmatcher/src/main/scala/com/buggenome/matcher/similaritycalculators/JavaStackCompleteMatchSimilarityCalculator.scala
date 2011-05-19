@@ -5,7 +5,7 @@ import com.buggenome.stacktrace.frame.{StackTraceTopLine, StackTraceMethodInvoca
 
 /**
  * Implements a similarity calculator which checks all lines for a "complete match". Since it is either a complete match
- *      or
+ *      or no match it returns 0 or 1 in each of its comparison methods.
  * User: pasemes
  * Date: 14/05/11
  * Time: 15:06

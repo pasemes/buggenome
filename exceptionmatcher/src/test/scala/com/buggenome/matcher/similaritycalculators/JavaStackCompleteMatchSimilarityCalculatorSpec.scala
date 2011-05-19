@@ -12,8 +12,7 @@ class JavaStackCompleteMatchSimilarityCalculatorSpec extends Specification {
     "A complete match similarity calculator" should {
 
         "blah blah" in {
-            val blah = new JavaStackCompleteMatchSimilarityCalculator with JavaStackSimilarityCalculationMethodWeights
-            blah.computeSimilarity(null, null)
+
         }
     }
 }

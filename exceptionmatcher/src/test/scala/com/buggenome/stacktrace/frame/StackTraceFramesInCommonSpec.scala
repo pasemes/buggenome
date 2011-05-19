@@ -8,7 +8,7 @@ package com.buggenome.stacktrace.frame
  */
 import org.specs.Specification
 import com.buggenome.stacktrace.StackTrace
-import com.weiglewilczek.slf4s.Logging
+
 
 class StackTraceFramesInCommonSpec extends Specification {
 

@@ -17,15 +17,11 @@ abstract class JavaStackSimilarityCalculator extends JavaStackSimilarityCalculat
      * @param otherStackTrace the other stack to compare to
      * @return an double value from 0 to 1, indicating the similarity
      */
-    final def computeSimilarity(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
-        println("JavaStackSimilarityCalculator->computeSimilarity")
-        this.wildcardSimilarityComparison(null, null)
-        0.0
-
-        //if()
-
-        //chamar os metodos de calculo de similaridade
-        //cada classe de calculo de similaridade pode ser um ator
+    final def computeSimilarity(stackTrace: StackTrace, otherStackTrace: StackTrace) : Double = {
+        val unormalizedSimilarity = this.fullSimilarityComparison(stackTrace, otherStackTrace) +
+                                    this.ignoringLineSimilarityComparison(stackTrace, otherStackTrace) +
+                                    this.wildcardSimilarityComparison(stackTrace, otherStackTrace)
+        unormalizedSimilarity / 3  //this is the mean of the approaches similarity results
     }
 
 }
