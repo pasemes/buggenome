@@ -13,12 +13,12 @@ import com.buggenome.stacktrace.frame.{StackTraceTopLine, StackTraceMethodInvoca
 //sempre retorna 1 ou 0
 class JavaStackCompleteMatchSimilarityCalculator extends JavaStackSimilarityCalculator {
 
-    protected def fullSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
+    protected[similaritycalculators] def fullSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
         if (stackTrace == otherStackTrace) 1
         else 0
     }
 
-    protected def ignoringLineSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
+    protected[similaritycalculators] def ignoringLineSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
         val stackLines = stackTrace.getAllLines
         val otherStackLines = otherStackTrace.getAllLines
 
@@ -36,7 +36,7 @@ class JavaStackCompleteMatchSimilarityCalculator extends JavaStackSimilarityCalc
         return 1 //since all lines are equal (ignoring the line number for the stack trace method lines) we return 1
     }
 
-    protected def wildcardSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
-        0.0  //TODO implement
+    protected[similaritycalculators] def wildcardSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
+        fullSimilarityComparison(stackTrace, otherStackTrace)  //TODO implement
     }
 }

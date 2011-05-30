@@ -18,10 +18,10 @@ abstract class JavaStackSimilarityCalculator extends JavaStackSimilarityCalculat
      * @return an double value from 0 to 1, indicating the similarity
      */
     final def computeSimilarity(stackTrace: StackTrace, otherStackTrace: StackTrace) : Double = {
-        val unormalizedSimilarity = this.fullSimilarityComparison(stackTrace, otherStackTrace) +
-                                    this.ignoringLineSimilarityComparison(stackTrace, otherStackTrace) +
-                                    this.wildcardSimilarityComparison(stackTrace, otherStackTrace)
-        unormalizedSimilarity / 3  //this is the mean of the approaches similarity results
+        val similaritySum = this.fullSimilarityComparison(stackTrace, otherStackTrace) +
+                            this.ignoringLineSimilarityComparison(stackTrace, otherStackTrace) +
+                            this.wildcardSimilarityComparison(stackTrace, otherStackTrace)
+        similaritySum / 3  //this is the mean of the approaches similarity results
     }
 
 }

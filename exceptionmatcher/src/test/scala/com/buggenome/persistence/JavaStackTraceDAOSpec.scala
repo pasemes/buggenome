@@ -45,10 +45,11 @@ class JavaStackTraceDAOSpec extends Specification {
             //inserting the stack
             JavaStackTraceDAO.insert(stackTrace)
 
-            //retrieving it again from the database for asserting some properties
+            //retrieving it again from the database
             val dbResult = JavaStackTraceDAO.findByStackTopLine(stackTrace.getTopLine, 0)
             val stackTraceFromDB = dbResult.next
 
+            //and asserting ig the stack retrieved from the DB is tha same as before it was persisted
             stackTraceFromDB must beEqualTo(stackTrace)
         }
     }

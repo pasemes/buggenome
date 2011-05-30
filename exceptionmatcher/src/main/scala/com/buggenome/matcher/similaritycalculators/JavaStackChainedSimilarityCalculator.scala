@@ -12,15 +12,15 @@ import com.buggenome.stacktrace.StackTrace
 class JavaStackChainedSimilarityCalculator extends JavaStackSimilarityCalculator {
 
     protected def fullSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
-        0.0
+        0.0 //TODO implement
     }
 
     protected def ignoringLineSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
-        0.0
+        0.0 //TODO implement
     }
 
     protected def wildcardSimilarityComparison(stackTrace : StackTrace, otherStackTrace : StackTrace) : Double = {
-        0.0
+        0.0 //TODO implement
     }
 
 }
